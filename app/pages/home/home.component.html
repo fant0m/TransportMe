@@ -1,0 +1,43 @@
+<ActionBar class="action-bar" xmlns="http://schemas.nativescript.org/tns.xsd">
+    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+        ios.position="left">
+    </ActionItem>
+    <Label class="action-bar-title" text="Transport Me"></Label>
+</ActionBar>
+
+<RadSideDrawer #drawer showOverNavigation="true">
+    <StackLayout tkDrawerContent>
+        <SideDrawer [selectedPage]="'Home'"></SideDrawer>
+    </StackLayout>
+
+    <StackLayout class="page page-content" tkMainContent>
+        <GridLayout rows="auto, *, auto" columns="*">
+            <StackLayout row=0 id="search" class="form">
+                <GridLayout rows="40" columns="30, *, 50" class="input-field">
+                    <Label row=0 col=0 class="location label fa" text="&#xf041;"></Label>
+                    <TextField row=0 col=1 class="input input-border"
+                               (blur)="setCurrentLocation()" hint="Location" [(ngModel)]='location'></TextField>
+                    <Button row=0 col=2 class="fa" text="&#xf277;" (tap)="findCurrentLocation()"></Button>
+                </GridLayout>
+                <GridLayout rows="40" columns="30, *, 50" class="input-field">
+                    <Label row=0 col=0 class="destination label fa" text="&#xf276;"></Label>
+                    <TextField row=0 col=1 class="input input-border" hint="Destination"
+                               [(ngModel)]='destination'></TextField>
+                    <Button row=0 col=2 class="fa" text="&#xf002;" (tap)="search()"></Button>
+                </GridLayout>
+            </StackLayout>
+            <StackLayout row="1">
+                <MapView [latitude]="latitude" padding="10" [longitude]="longitude" (mapReady)="onMapReady($event)"
+                         [zoom]="zoom" [bearing]="bearing" [tilt]="tilt">
+                </MapView>
+            </StackLayout>
+            <StackLayout row="2" id="result" orientation="horizontal" *ngIf="searchData">
+                <Label width="68%" verticalAlignment="center"
+                       text="{{ searchData.distance }} - {{ searchData.text }} - {{ searchData.price }}€"></Label>
+                <Button horizontalAlignment="right" text="Confirm" class="btn btn-rounded-sm"
+                        (tap)="confirm()"></Button>
+            </StackLayout>
+        </GridLayout>
+    </StackLayout>
+</RadSideDrawer>
